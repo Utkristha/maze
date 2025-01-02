@@ -7,6 +7,7 @@
 #include <random>
 #include <unistd.h>
 #include "list.h"
+#include "graphics.h"
 
 using namespace std;
 
@@ -76,7 +77,7 @@ public:
         }
     }
 
-    void neighbour_processing(int x, int y, LinkedList &visit, stack &store, bool visit_status)
+    void neighbour_processing(int x, int y, LinkedList &visit, stack &store, bool visit_status,maze_creation &maze1)
     {
         if (x >= 0 && x < n && y >= 0 && y < n)
         {
@@ -94,6 +95,8 @@ public:
                         maze_pointer[x][y] = '0';
 
                         temphead->position.visited = visit_status;
+
+                        maze1.move_cell(x,y);
                     }
                 }
                 temphead = temphead->next;
@@ -101,11 +104,13 @@ public:
         }
     }
 
-    void maze_generation(LinkedList &visit, stack &store)
+    void maze_generation(LinkedList &visit, stack &store,maze_creation &maze2)
     {
         int starting_i = 0, starting_j = 0;
         bool visit_status = true;
         store.push(starting_i, starting_j, visit_status);
+
+        maze2.move_cell(0,0);
 
         while (!store.isEmpty())
         {
@@ -143,7 +148,7 @@ public:
                     y += 1;
                     break;
                 }
-                neighbour_processing(x, y, visit, store, visit_status);
+                neighbour_processing(x, y, visit, store, visit_status,maze2);
             }
         }
     }
